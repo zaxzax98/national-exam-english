@@ -221,6 +221,42 @@ Code · HTML
 
 تريدين أسوي لك نسخة مطورة أكثر قبل ما ترفعينها؟
 
+photo.jpeg
+9:54 AM
+
+Diagnosed GitHub Pages deployment issue and identified configuration
+Diagnosed GitHub Pages deployment issue and identified configuration
+ممتاز! الإعدادات صحيحة 100% 👏
+
+شايفة بالتاب مكتوب "Site not found" — هذا يعني شي واحد من ثنين:
+
+1. تأكدي إن اسم الملف index.html اروحي للـ repository الرئيسي (Code tab) وشوفي الملف — لازم يكون اسمه بالضبط index.html مو exam-app.html. إذا اسمه غلط، اضغطي على الملف ثم القلم (Edit) ثم غيري الاسم من فوق.
+
+2. انتظري 2-3 دقائق GitHub Pages يحتاج شوية وقت أول مرة. بعدها جربي الرابط:
+
+https://zaxzax98.github.io/national-exam-english/
+
+إذا بعدها ما اشتغل، اضغطي Save مرة ثانية بصفحة Pages وانتظري دقيقة.
+
+photo.jpeg
+9:56 AM
+
+Identified file format incompatibility and prescribed solution
+Identified file format incompatibility and prescribed solution
+هنا المشكلة! 👆
+
+الملف اسمه index.jsx — وهذا ملف React ما يشتغل على GitHub Pages مباشرة. لازم ترفعين ملف index.html (الي سويته لك الـ HTML).
+
+الخطوات:
+
+1. احذفي index.jsx — اضغطي عليه، ثم اضغطي أيقونة السلة 🗑️ (Delete) فوق، ثم Commit changes
+
+2. ارفعي الملف الصحيح — اضغطي Add file → Upload files، ارفعي ملف exam-app.html بس غيري اسمه قبل الرفع إلى index.html
+
+أو الأسهل: اضغطي Add file → Create new file، سمي الملف index.html، وأنا أعطيك المحتوى تنسخيه وتلصقيه.
+
+تريدين أسوي لك الملف من جديد تنسخيه مباشرة؟
+
 
 
 agruing 
@@ -230,302 +266,321 @@ Claude is AI and can make mistakes. Please double-check responses.
 
 
 raw
-National exam quiz · JSX
-import { useState, useEffect, useRef } from "react";
+Exam app · HTML
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>الاختبار الوطني — English Mock Test</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0a0a14;color:#fff;min-height:100vh;overflow-x:hidden}
+.screen{display:none;min-height:100vh}
+.screen.active{display:flex;flex-direction:column}
  
-const QUESTIONS = [
-  {cat:"SG",q:"Emma is older ______ Alice, while Jolie is ______ oldest.",opts:["than - the","the","the - than","than - than"],ans:0},
-  {cat:"LF",q:'"Sleep well" — Function?',opts:["Regret","Wish","Blame","Plead"],ans:1},
-  {cat:"SG",q:"Speaker A: I like spicy food.\nSpeaker B: _______.",opts:["Neither do I","Neither","So","So do I"],ans:3},
-  {cat:"LF",q:'"Don\'t give up" — Function?',opts:["Advice","Encourage","Remind","Direction"],ans:1},
-  {cat:"LF",q:'"This (maybe) the reason they don\'t go to the birthday party." — Function?',opts:["Uncertainty","Certainty","Welcome","Suggestion"],ans:0},
-  {cat:"SG",q:"They _______ to the market.",opts:["will","is go","are going","going"],ans:2},
-  {cat:"CV",q:'"I\'m hungry, who ate my sandwich?" — Answer?',opts:["He did that","All","Is do","She has"],ans:0},
-  {cat:"CV",q:"You are studying, ask your brother to be quiet.",opts:["More noise please","Please don't make noise","It's a quiet room","Study with me"],ans:1},
-  {cat:"CV",q:'"It\'s _______"\n"Yes, it\'s spring."',opts:["It's so gloomy","It's too hot","It's lovely flower","It's freezing"],ans:0},
-  {cat:"SG",q:"I take _______ umbrella.",opts:["your","yours","you","you are"],ans:0},
-  {cat:"LF",q:'The idiom "hit the nail on the head" means:',opts:["To be exactly right","To be wrong","To save money","To be careful"],ans:0},
-  {cat:"SG",q:"Certain diseases can be treated successfully _______ they are identified at an early stage.",opts:["which","if","where","for"],ans:1},
-  {cat:"CV",q:"Sarah: Can you help me? Mary: Sure, I am free after 3:00.\nWhat does Mary mean?",opts:["She can help after 3:00","She is not available","She is busy","Sara should work alone"],ans:0},
-  {cat:"CV",q:'Bill: "We will have to run to catch it."\nWhat does Bill mean?',opts:["Bill doesn't want to go","It's better to walk","Bill prefers a taxi","They should move quickly"],ans:3},
-  {cat:"SG",q:"When I saw them, they _______ and I thought they _______ because their eyes were red.",opts:["were arguing / had been crying","had been arguing / cried","argued / were crying","were arguing / would cry"],ans:0},
-  {cat:"LF",q:'"I\'m embarrassed to look at them straight in the eye" — The feeling is:',opts:["Embarrassment","Disappointment","Anger","Shock"],ans:0},
-  {cat:"SG",q:"Most of the visitors arrived _______ buses.",opts:["with","from","by","in"],ans:2},
-  {cat:"SG",q:"Featured at the Henry Ford Museum ______ of antique cars dating from 1865.",opts:["an exhibit is","an exhibit","is an exhibit","which is an exhibit is"],ans:2},
-  {cat:"LF",q:'"Personally, I think you have to start your project earlier" — Function?',opts:["Regret","Request","Opinion","Wish"],ans:2},
-  {cat:"SG",q:"I _______ when the phone rang.",opts:["sleeping","sleep","slept","was sleeping"],ans:3},
-  {cat:"SG",q:"He lived in Canada _______ 13 years.",opts:["since","for","on","so"],ans:1},
-  {cat:"CV",q:'Child: "I was just about to start when my friend called me to play basketball."\nWhat does the child mean?',opts:["He didn't clean","Room is already clean","Basketball is more important","He will clean after basketball"],ans:3},
-  {cat:"SG",q:'He didn\'t study, and thus, he didn\'t pass. "Thus" is:',opts:["Adjective","Linking word","Adverb","Relative pronoun"],ans:1},
-  {cat:"SG",q:'"She woke up early." — "Woke up" is:',opts:["Stative verb","Dynamic verb","Linking verb","Phrasal verb"],ans:3},
-  {cat:"CV",q:'Woman: "Flight 211 was canceled."\nWhat does she mean?',opts:["211 passengers called","Flight was called off","Flight was announced","Flight was delayed"],ans:1},
-  {cat:"RC",p:"Dr. Sara Adel is a young doctor whose dedication to helping others knows no bounds. She treats patients with kindness and empathy.",q:"How does Sara approach her interactions with patients?",opts:["With empathy and kindness","With indifference","With strict professionalism","With impatience"],ans:0},
-  {cat:"RC",q:"What is described as Sara's calling?",opts:["Serving humanity","Climbing the career ladder","Making money","Becoming famous"],ans:0},
-  {cat:"RC",q:"What motivated Sara to become a doctor?",opts:["Financial gain","Desire to make a difference","Pressure from family","Lack of other options"],ans:1},
-  {cat:"RC",q:"What does Sara's story serve as?",opts:["Importance of self-interest","A cautionary tale","Limitation of youth","Fulfillment in serving others"],ans:3},
-  {cat:"RC",q:"What kind of communities does Sara volunteer to serve?",opts:["Wealthy","Middle-class","Underserved and homeless","Only pediatric"],ans:2},
-  {cat:"RC",p:"Tennis is played between two players (singles) or two teams of two (doubles). Each player uses a racket to strike a hollow rubber ball covered with felt.",q:"What do you use to hit a tennis ball?",opts:["A bat","A striker","A racket","None of the above"],ans:2},
-  {cat:"RC",q:"How many people can play tennis at once?",opts:["One","Two","Four","Both B and C"],ans:3},
-  {cat:"RC",q:"Where did tennis originate?",opts:["Australia","Asia","The United States","The United Kingdom"],ans:3},
-  {cat:"RC",q:"When did people start playing tennis?",opts:["Late 18th century","Late 19th century","Late 1800s","Both B and C"],ans:3},
-  {cat:"RC",q:"Why do most people play tennis?",opts:["Because it is fun","To win","No basketball","Both A and B"],ans:0},
-  {cat:"RC",p:"Oil paint is made by combining dry colored powder with oil. Painters used layers to create light, shadows, and realistic appearances.",q:"How is oil paint made?",opts:["Mixing water with powder","Combining powder with oil","Blending with vinegar","Melting wax with oil"],ans:1},
-  {cat:"RC",q:"Who was famous for using oil paints in layers?",opts:["Pablo Picasso","Jan van Eyck","Leonardo da Vinci","Vincent van Gogh"],ans:1},
-  {cat:"RC",q:"What did layers in oil paintings give to subjects?",opts:["Motion","Reality","Abstractness","Humor"],ans:1},
-  {cat:"RC",q:"Why was oil paint favored in the past?",opts:["Inexpensive","Popular","Created light and shadows","Easily washable"],ans:2},
-  {cat:"RC",q:"How to recognize an oil painting?",opts:["Quick drying","Absence of color","Shadows made by oil paint","Poppy oil only"],ans:2},
+/* HOME */
+.home{background:linear-gradient(180deg,#0f0b2e 0%,#1a1145 40%,#0d1f3c 100%);align-items:center;justify-content:center;padding:2rem 1.5rem;text-align:center}
+.logo{width:90px;height:90px;border-radius:50%;background:rgba(83,74,183,0.15);border:2px solid rgba(83,74,183,0.4);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:40px}
+.home h1{font-size:26px;font-weight:700;margin-bottom:6px;background:linear-gradient(135deg,#fff,#c4bfff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.home .sub{color:rgba(255,255,255,0.5);font-size:13px;margin-bottom:24px}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px;width:100%;max-width:360px}
+.stat-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:12px 4px}
+.stat-card .num{font-size:22px;font-weight:700}
+.stat-card .lbl{font-size:10px;color:rgba(255,255,255,0.4);margin-top:2px}
+.info-row{display:flex;gap:10px;justify-content:center;margin-bottom:28px}
+.info-pill{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:8px 16px;font-size:12px;color:rgba(255,255,255,0.6)}
+.info-pill b{color:#fff;font-weight:600}
+.start-btn{width:100%;max-width:360px;padding:16px;border-radius:14px;border:none;background:linear-gradient(135deg,#534AB7,#7B6CF0);color:#fff;font-size:17px;font-weight:700;cursor:pointer;box-shadow:0 4px 24px rgba(83,74,183,0.4);transition:transform 0.1s}
+.start-btn:active{transform:scale(0.97)}
+ 
+/* QUIZ */
+.quiz{background:#0a0a14}
+.top-bar{position:sticky;top:0;z-index:10;background:rgba(10,10,20,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.05);padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
+.top-left{display:flex;align-items:center;gap:10px}
+.q-counter{font-size:14px;font-weight:700}.q-counter span{color:rgba(255,255,255,0.3)}
+.prog-bar{width:70px;height:4px;background:rgba(255,255,255,0.06);border-radius:99px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,#534AB7,#7B6CF0);border-radius:99px;transition:width 0.4s}
+.top-right{display:flex;gap:10px;align-items:center;font-size:12px}
+.t-ok{color:#5DCAA5}.t-no{color:#F09595}
+.timer{color:rgba(255,255,255,0.4);font-family:monospace;font-size:13px}
+.timer.warn{color:#F09595;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+ 
+.q-body{padding:16px 16px 100px;max-width:480px;margin:0 auto;width:100%}
+.cat-badge{display:inline-block;font-size:10px;padding:3px 10px;border-radius:20px;font-weight:600;margin-bottom:14px}
+.cat-RC{background:rgba(24,95,165,0.15);color:#85B7EB}
+.cat-LF{background:rgba(83,74,183,0.15);color:#AFA9EC}
+.cat-CV{background:rgba(15,110,86,0.15);color:#5DCAA5}
+.cat-SG{background:rgba(133,79,11,0.15);color:#EF9F27}
+ 
+.passage{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:12px;padding:14px;margin-bottom:16px;font-size:13px;color:rgba(255,255,255,0.6);line-height:1.7;text-align:left;direction:ltr;max-height:180px;overflow-y:auto}
+.q-text{font-size:16px;font-weight:600;line-height:1.6;margin-bottom:20px;text-align:left;direction:ltr;white-space:pre-line}
+ 
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px 14px;font-size:14px;color:rgba(255,255,255,0.85);cursor:pointer;text-align:left;direction:ltr;display:flex;align-items:flex-start;gap:12px;transition:all 0.15s;line-height:1.45;-webkit-user-select:none}
+.opt:active:not(.done){background:rgba(255,255,255,0.08);transform:scale(0.98)}
+.opt .letter{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.4);transition:all 0.2s}
+.opt.correct{background:rgba(93,202,165,0.1);border-color:rgba(93,202,165,0.4);color:#5DCAA5}
+.opt.correct .letter{background:rgba(93,202,165,0.2);color:#5DCAA5}
+.opt.wrong{background:rgba(240,149,149,0.1);border-color:rgba(240,149,149,0.4);color:#F09595}
+.opt.wrong .letter{background:rgba(240,149,149,0.2);color:#F09595}
+.opt.dim{opacity:0.3}
+.opt.done{cursor:default}
+ 
+.feedback{margin-top:14px;padding:12px 16px;border-radius:12px;font-size:13px;line-height:1.5;text-align:right;display:none}
+.feedback.show{display:block}
+.feedback.ok{background:rgba(93,202,165,0.08);border:1px solid rgba(93,202,165,0.12);color:#5DCAA5}
+.feedback.no{background:rgba(240,149,149,0.08);border:1px solid rgba(240,149,149,0.12);color:#F09595}
+ 
+.next-bar{position:fixed;bottom:0;left:0;right:0;padding:12px 16px;background:rgba(10,10,20,0.95);backdrop-filter:blur(12px);border-top:1px solid rgba(255,255,255,0.05);display:none;z-index:10}
+.next-bar.show{display:block}
+.next-btn{width:100%;max-width:480px;margin:0 auto;display:block;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,#534AB7,#7B6CF0);color:#fff;font-size:15px;font-weight:700;cursor:pointer}
+.next-btn:active{transform:scale(0.97)}
+ 
+/* RESULT */
+.result{background:linear-gradient(180deg,#0f0b2e 0%,#1a1145 40%,#0d1f3c 100%);padding:2rem 1.5rem;align-items:center}
+.res-emoji{font-size:64px;margin:1rem 0 0.5rem}
+.res-score{font-size:52px;font-weight:800;background:linear-gradient(135deg,#fff,#c4bfff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.res-pct{font-size:15px;color:rgba(255,255,255,0.4);margin-bottom:4px}
+.res-msg{font-size:17px;font-weight:600;margin-bottom:24px}
+.res-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:360px;margin-bottom:24px}
+.res-stat{border-radius:12px;padding:14px;text-align:center}
+.res-stat.ok{background:rgba(93,202,165,0.08);border:1px solid rgba(93,202,165,0.12)}
+.res-stat.no{background:rgba(240,149,149,0.08);border:1px solid rgba(240,149,149,0.12)}
+.res-stat .rn{font-size:28px;font-weight:700}
+.res-stat .rl{font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px}
+ 
+.wrong-title{font-size:15px;font-weight:600;margin-bottom:12px;text-align:right;width:100%;max-width:360px}
+.wrong-list{width:100%;max-width:360px;margin-bottom:24px}
+.wrong-item{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:12px;padding:14px;margin-bottom:8px;text-align:left;direction:ltr}
+.wrong-item .wi-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;direction:rtl}
+.wrong-item .wi-cat{font-size:10px;padding:2px 8px;border-radius:12px}
+.wrong-item .wi-num{font-size:10px;color:rgba(255,255,255,0.2)}
+.wrong-item .wi-q{font-size:13px;color:rgba(255,255,255,0.7);line-height:1.5;margin-bottom:6px}
+.wrong-item .wi-wrong{font-size:12px;color:#F09595}
+.wrong-item .wi-right{font-size:12px;color:#5DCAA5;margin-top:2px}
+ 
+.res-btns{width:100%;max-width:360px}
+.res-btns button{width:100%;padding:14px;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;margin-bottom:8px}
+.res-btns .primary{border:none;background:linear-gradient(135deg,#534AB7,#7B6CF0);color:#fff;box-shadow:0 4px 24px rgba(83,74,183,0.3)}
+.res-btns .secondary{border:1px solid rgba(255,255,255,0.1);background:transparent;color:rgba(255,255,255,0.5)}
+</style>
+</head>
+<body>
+ 
+<!-- HOME SCREEN -->
+<div class="screen home active" id="homeScreen">
+  <div class="logo">📝</div>
+  <h1>الاختبار الوطني</h1>
+  <div class="sub">Mock Test — اختبار تجريبي<br>بإشراف أستاذ سعد صبحي</div>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="num" style="color:#85B7EB">10</div><div class="lbl">قراءة</div></div>
+    <div class="stat-card"><div class="num" style="color:#AFA9EC">7</div><div class="lbl">وظائف</div></div>
+    <div class="stat-card"><div class="num" style="color:#5DCAA5">8</div><div class="lbl">محادثات</div></div>
+    <div class="stat-card"><div class="num" style="color:#EF9F27">15</div><div class="lbl">قواعد</div></div>
+  </div>
+  <div class="info-row">
+    <div class="info-pill"><b>40</b> سؤال</div>
+    <div class="info-pill"><b>60</b> دقيقة</div>
+    <div class="info-pill"><b>40</b> نقطة</div>
+  </div>
+  <button class="start-btn" onclick="startQuiz()">ابدأ الاختبار</button>
+</div>
+ 
+<!-- QUIZ SCREEN -->
+<div class="screen quiz" id="quizScreen">
+  <div class="top-bar">
+    <div class="top-left">
+      <div class="q-counter" id="qCounter">1<span>/40</span></div>
+      <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+    </div>
+    <div class="top-right">
+      <span class="t-ok" id="tOk">✓ 0</span>
+      <span class="t-no" id="tNo">✗ 0</span>
+      <span class="timer" id="timerEl">60:00</span>
+    </div>
+  </div>
+  <div class="q-body" id="qBody"></div>
+  <div class="next-bar" id="nextBar">
+    <button class="next-btn" onclick="nextQuestion()">السؤال التالي ←</button>
+  </div>
+</div>
+ 
+<!-- RESULT SCREEN -->
+<div class="screen result" id="resultScreen"></div>
+ 
+<script>
+const Q=[
+{cat:"SG",q:"Emma is older ______ Alice, while Jolie is ______ oldest.",opts:["than - the","the","the - than","than - than"],ans:0},
+{cat:"LF",q:'"Sleep well" — Function?',opts:["Regret","Wish","Blame","Plead"],ans:1},
+{cat:"SG",q:"Speaker A: I like spicy food.\nSpeaker B: _______.",opts:["Neither do I","Neither","So","So do I"],ans:3},
+{cat:"LF",q:'"Don\'t give up" — Function?',opts:["Advice","Encourage","Remind","Direction"],ans:1},
+{cat:"LF",q:'"This (maybe) the reason they don\'t go to the birthday party." — Function?',opts:["Uncertainty","Certainty","Welcome","Suggestion"],ans:0},
+{cat:"SG",q:"They _______ to the market.",opts:["will","is go","are going","going"],ans:2},
+{cat:"CV",q:'"I\'m hungry, who ate my sandwich?" — Answer?',opts:["He did that","All","Is do","She has"],ans:0},
+{cat:"CV",q:"You are studying, ask your brother to be quiet.",opts:["More noise please","Please don't make noise","It's a quiet room","Study with me"],ans:1},
+{cat:"CV",q:'"It\'s _______" — "Yes, it\'s spring."',opts:["It's so gloomy","It's too hot","It's lovely flower","It's freezing"],ans:0},
+{cat:"SG",q:"I take _______ umbrella.",opts:["your","yours","you","you are"],ans:0},
+{cat:"LF",q:'The idiom "hit the nail on the head" means:',opts:["To be exactly right","To be wrong","To save money","To be careful"],ans:0},
+{cat:"SG",q:"Certain diseases can be treated successfully _______ they are identified at an early stage.",opts:["which","if","where","for"],ans:1},
+{cat:"CV",q:"Sarah: Can you help me?\nMary: Sure, I am free after 3:00.\nWhat does Mary mean?",opts:["She can help after 3:00","She is not available","She is busy","Sara should work alone"],ans:0},
+{cat:"CV",q:'Bill: "We will have to run to catch it."\nWhat does Bill mean?',opts:["Doesn't want to go","Better to walk","Prefers a taxi","Should move quickly"],ans:3},
+{cat:"SG",q:"When I saw them, they _______ and I thought they _______ because their eyes were red.",opts:["were arguing / had been crying","had been arguing / cried","argued / were crying","were arguing / would cry"],ans:0},
+{cat:"LF",q:'"I\'m embarrassed to look at them straight in the eye" — Feeling?',opts:["Embarrassment","Disappointment","Anger","Shock"],ans:0},
+{cat:"SG",q:"Most of the visitors arrived _______ buses.",opts:["with","from","by","in"],ans:2},
+{cat:"SG",q:"Featured at the Henry Ford Museum ______ of antique cars dating from 1865.",opts:["an exhibit is","an exhibit","is an exhibit","which is an exhibit"],ans:2},
+{cat:"LF",q:'"Personally, I think you should start earlier" — Function?',opts:["Regret","Request","Opinion","Wish"],ans:2},
+{cat:"SG",q:"I _______ when the phone rang.",opts:["sleeping","sleep","slept","was sleeping"],ans:3},
+{cat:"SG",q:"He lived in Canada _______ 13 years.",opts:["since","for","on","so"],ans:1},
+{cat:"CV",q:'Child: "I was just about to start when my friend called me."\nMeaning?',opts:["He didn't clean","Room is clean","Basketball > cleaning","Will clean after basketball"],ans:3},
+{cat:"SG",q:'"Thus" in "He didn\'t study, thus he didn\'t pass" is:',opts:["Adjective","Linking word","Adverb","Relative pronoun"],ans:1},
+{cat:"SG",q:'"She woke up early." — "Woke up" is:',opts:["Stative verb","Dynamic verb","Linking verb","Phrasal verb"],ans:3},
+{cat:"CV",q:'"Flight 211 was canceled." — Meaning?',opts:["Passengers called","Flight called off","Flight announced","Flight delayed"],ans:1},
+{cat:"RC",p:"Dr. Sara Adel treats patients with kindness and empathy, works long hours, and finds joy in every recovery.",q:"How does Sara treat patients?",opts:["Empathy and kindness","Indifference","Strict professionalism","Impatience"],ans:0},
+{cat:"RC",q:"What is Sara's calling?",opts:["Serving humanity","Career ladder","Making money","Becoming famous"],ans:0},
+{cat:"RC",q:"What motivated Sara?",opts:["Financial gain","Desire to make a difference","Family pressure","No other options"],ans:1},
+{cat:"RC",q:"Sara's story serves as?",opts:["Self-interest","Cautionary tale","Limitation of youth","Fulfillment in serving others"],ans:3},
+{cat:"RC",q:"What communities does Sara serve?",opts:["Wealthy","Middle-class","Underserved and homeless","Only pediatric"],ans:2},
+{cat:"RC",p:"Tennis is played using a racket to strike a hollow rubber ball. Originated in the UK in the late 19th century.",q:"What do you use to hit a tennis ball?",opts:["A bat","A striker","A racket","None of the above"],ans:2},
+{cat:"RC",q:"How many can play tennis at once?",opts:["One","Two","Four","Both B and C"],ans:3},
+{cat:"RC",q:"Where did tennis originate?",opts:["Australia","Asia","United States","United Kingdom"],ans:3},
+{cat:"RC",q:"When did tennis start?",opts:["Late 18th century","Late 19th century","Late 1800s","Both B and C"],ans:3},
+{cat:"RC",q:"Why do most people play tennis?",opts:["It is fun","To win","No basketball","Both A and B"],ans:0},
+{cat:"RC",p:"Oil paint is made by combining dry colored powder with oil. Layers create light, shadows, and realism.",q:"How is oil paint made?",opts:["Water + powder","Powder + oil","Powder + vinegar","Wax + oil"],ans:1},
+{cat:"RC",q:"Famous painter using oil paint layers?",opts:["Picasso","Jan van Eyck","da Vinci","van Gogh"],ans:1},
+{cat:"RC",q:"What did layers give paintings?",opts:["Motion","Reality","Abstractness","Humor"],ans:1},
+{cat:"RC",q:"Why was oil paint favored?",opts:["Inexpensive","Popular","Light and shadows","Washable"],ans:2},
+{cat:"RC",q:"How to recognize oil painting?",opts:["Quick drying","No color","Shadows","Poppy oil only"],ans:2}
 ];
  
-const CAT_INFO = {
-  RC: { name: "Reading", nameAr: "قراءة", color: "#185FA5", bg: "#E6F1FB" },
-  LF: { name: "Language Functions", nameAr: "وظائف اللغة", color: "#534AB7", bg: "#EEEDFE" },
-  CV: { name: "Conversations", nameAr: "محادثات", color: "#0F6E56", bg: "#E1F5EE" },
-  SG: { name: "Grammar", nameAr: "قواعد", color: "#854F0B", bg: "#FAEEDA" },
-};
+const catNames={RC:"قراءة",LF:"وظائف اللغة",CV:"محادثات",SG:"قواعد"};
+const catEn={RC:"Reading",LF:"Functions",CV:"Conversations",SG:"Grammar"};
+const letters=["A","B","C","D"];
+let cur=0,ok=0,no=0,isAnswered=false,history=[];
+let timerVal=3600,timerInterval=null;
  
-const letters = ["A", "B", "C", "D"];
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
  
-export default function App() {
-  const [screen, setScreen] = useState("home");
-  const [cur, setCur] = useState(0);
-  const [correct, setCorrect] = useState(0);
-  const [wrong, setWrong] = useState(0);
-  const [selected, setSelected] = useState(null);
-  const [answered, setAnswered] = useState(false);
-  const [history, setHistory] = useState([]);
-  const [timer, setTimer] = useState(3600);
-  const [timerActive, setTimerActive] = useState(false);
-  const intervalRef = useRef(null);
- 
-  useEffect(() => {
-    if (timerActive && timer > 0) {
-      intervalRef.current = setInterval(() => setTimer(t => {
-        if (t <= 1) { clearInterval(intervalRef.current); setTimerActive(false); setScreen("result"); return 0; }
-        return t - 1;
-      }), 1000);
-    }
-    return () => clearInterval(intervalRef.current);
-  }, [timerActive]);
- 
-  const formatTime = (s) => {
-    const m = Math.floor(s / 60);
-    const sec = s % 60;
-    return `${m}:${sec < 10 ? "0" : ""}${sec}`;
-  };
- 
-  const startQuiz = () => {
-    setCur(0); setCorrect(0); setWrong(0); setSelected(null); setAnswered(false);
-    setHistory([]); setTimer(3600); setTimerActive(true); setScreen("quiz");
-  };
- 
-  const handlePick = (i) => {
-    if (answered) return;
-    setSelected(i);
-    setAnswered(true);
-    const isCorrect = i === QUESTIONS[cur].ans;
-    if (isCorrect) setCorrect(c => c + 1);
-    else setWrong(w => w + 1);
-    setHistory(h => [...h, { qIdx: cur, picked: i, correct: isCorrect }]);
-  };
- 
-  const nextQ = () => {
-    if (cur + 1 >= QUESTIONS.length) {
-      setTimerActive(false);
-      clearInterval(intervalRef.current);
-      setScreen("result");
-    } else {
-      setCur(c => c + 1);
-      setSelected(null);
-      setAnswered(false);
-    }
-  };
- 
-  const pct = Math.round((correct / QUESTIONS.length) * 100);
- 
-  if (screen === "home") {
-    return (
-      <div style={{ minHeight: "100vh", background: "linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "2rem 1rem", fontFamily: "'Inter', system-ui, sans-serif" }}>
-        <div style={{ width: "100%", maxWidth: 400, textAlign: "center" }}>
-          <div style={{ width: 80, height: 80, borderRadius: "50%", background: "rgba(83,74,183,0.2)", border: "2px solid rgba(83,74,183,0.5)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 1.5rem", fontSize: 36 }}>
-            📝
-          </div>
-          <h1 style={{ color: "#fff", fontSize: 24, fontWeight: 600, marginBottom: 8 }}>الاختبار الوطني</h1>
-          <p style={{ color: "rgba(255,255,255,0.6)", fontSize: 14, marginBottom: 2 }}>Mock Test — اختبار تجريبي</p>
-          <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 12, marginBottom: 32 }}>بإشراف أستاذ سعد صبحي</p>
- 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 24 }}>
-            {Object.entries(CAT_INFO).map(([k, v]) => (
-              <div key={k} style={{ background: "rgba(255,255,255,0.06)", borderRadius: 12, padding: "12px 8px", border: "1px solid rgba(255,255,255,0.08)" }}>
-                <div style={{ fontSize: 20, fontWeight: 600, color: v.color === "#854F0B" ? "#EF9F27" : v.color === "#185FA5" ? "#85B7EB" : v.color === "#534AB7" ? "#AFA9EC" : "#5DCAA5" }}>
-                  {QUESTIONS.filter(q => q.cat === k).length}
-                </div>
-                <div style={{ fontSize: 11, color: "rgba(255,255,255,0.5)", marginTop: 2 }}>{v.nameAr}</div>
-              </div>
-            ))}
-          </div>
- 
-          <div style={{ display: "flex", gap: 12, justifyContent: "center", marginBottom: 24 }}>
-            <div style={{ background: "rgba(255,255,255,0.06)", borderRadius: 10, padding: "10px 16px", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <div style={{ fontSize: 18, fontWeight: 600, color: "#fff" }}>40</div>
-              <div style={{ fontSize: 10, color: "rgba(255,255,255,0.4)" }}>سؤال</div>
-            </div>
-            <div style={{ background: "rgba(255,255,255,0.06)", borderRadius: 10, padding: "10px 16px", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <div style={{ fontSize: 18, fontWeight: 600, color: "#fff" }}>60</div>
-              <div style={{ fontSize: 10, color: "rgba(255,255,255,0.4)" }}>دقيقة</div>
-            </div>
-            <div style={{ background: "rgba(255,255,255,0.06)", borderRadius: 10, padding: "10px 16px", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <div style={{ fontSize: 18, fontWeight: 600, color: "#fff" }}>40</div>
-              <div style={{ fontSize: 10, color: "rgba(255,255,255,0.4)" }}>نقطة</div>
-            </div>
-          </div>
- 
-          <button onClick={startQuiz} style={{ width: "100%", padding: "14px 0", borderRadius: 12, border: "none", background: "#534AB7", color: "#fff", fontSize: 16, fontWeight: 600, cursor: "pointer", transition: "transform 0.1s" }}
-            onMouseDown={e => e.target.style.transform = "scale(0.97)"}
-            onMouseUp={e => e.target.style.transform = "scale(1)"}>
-            ابدأ الاختبار
-          </button>
-        </div>
-      </div>
-    );
-  }
- 
-  if (screen === "result") {
-    const wrongOnes = history.filter(h => !h.correct);
-    return (
-      <div style={{ minHeight: "100vh", background: "linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)", padding: "2rem 1rem", fontFamily: "'Inter', system-ui, sans-serif" }}>
-        <div style={{ maxWidth: 400, margin: "0 auto", textAlign: "center" }}>
-          <div style={{ fontSize: 56, marginBottom: 8 }}>{pct >= 80 ? "🎉" : pct >= 50 ? "💪" : "📚"}</div>
-          <div style={{ fontSize: 48, fontWeight: 700, color: "#fff" }}>{correct}/{QUESTIONS.length}</div>
-          <div style={{ fontSize: 14, color: "rgba(255,255,255,0.5)", marginBottom: 4 }}>{pct}%</div>
-          <div style={{ fontSize: 16, color: pct >= 80 ? "#5DCAA5" : pct >= 50 ? "#EF9F27" : "#F09595", fontWeight: 500, marginBottom: 24 }}>
-            {pct >= 80 ? "ممتاز! جاهزة للوطني" : pct >= 50 ? "زين، بس راجعي الأخطاء" : "محتاجة مراجعة أكثر"}
-          </div>
- 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 24 }}>
-            <div style={{ background: "rgba(93,202,165,0.1)", borderRadius: 10, padding: 12, border: "1px solid rgba(93,202,165,0.2)" }}>
-              <div style={{ fontSize: 24, fontWeight: 600, color: "#5DCAA5" }}>{correct}</div>
-              <div style={{ fontSize: 11, color: "rgba(255,255,255,0.4)" }}>صح</div>
-            </div>
-            <div style={{ background: "rgba(240,149,149,0.1)", borderRadius: 10, padding: 12, border: "1px solid rgba(240,149,149,0.2)" }}>
-              <div style={{ fontSize: 24, fontWeight: 600, color: "#F09595" }}>{wrong}</div>
-              <div style={{ fontSize: 11, color: "rgba(255,255,255,0.4)" }}>غلط</div>
-            </div>
-          </div>
- 
-          {wrongOnes.length > 0 && (
-            <div style={{ textAlign: "right", marginBottom: 20 }}>
-              <div style={{ fontSize: 14, fontWeight: 500, color: "#fff", marginBottom: 10 }}>الأسئلة الي غلطتي بيها:</div>
-              {wrongOnes.map((w, idx) => {
-                const q = QUESTIONS[w.qIdx];
-                const ci = CAT_INFO[q.cat];
-                return (
-                  <div key={idx} style={{ background: "rgba(255,255,255,0.04)", borderRadius: 10, padding: 12, marginBottom: 8, border: "1px solid rgba(255,255,255,0.06)", textAlign: "left" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
-                      <span style={{ fontSize: 10, padding: "2px 6px", borderRadius: 6, background: ci.bg, color: ci.color }}>{ci.nameAr}</span>
-                      <span style={{ fontSize: 10, color: "rgba(255,255,255,0.3)" }}>Q{w.qIdx + 1}</span>
-                    </div>
-                    <div style={{ fontSize: 13, color: "rgba(255,255,255,0.8)", marginBottom: 6, lineHeight: 1.5 }}>{q.q}</div>
-                    <div style={{ fontSize: 12, color: "#F09595", marginBottom: 2 }}>❌ {letters[w.picked]}) {q.opts[w.picked]}</div>
-                    <div style={{ fontSize: 12, color: "#5DCAA5" }}>✓ {letters[q.ans]}) {q.opts[q.ans]}</div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
- 
-          <button onClick={startQuiz} style={{ width: "100%", padding: "14px 0", borderRadius: 12, border: "none", background: "#534AB7", color: "#fff", fontSize: 15, fontWeight: 600, cursor: "pointer", marginBottom: 10 }}>
-            اعادة الاختبار
-          </button>
-          <button onClick={() => setScreen("home")} style={{ width: "100%", padding: "12px 0", borderRadius: 12, border: "1px solid rgba(255,255,255,0.15)", background: "transparent", color: "rgba(255,255,255,0.6)", fontSize: 13, cursor: "pointer" }}>
-            الرجوع للرئيسية
-          </button>
-        </div>
-      </div>
-    );
-  }
- 
-  const q = QUESTIONS[cur];
-  const ci = CAT_INFO[q.cat];
- 
-  return (
-    <div style={{ minHeight: "100vh", background: "#0f0f1a", padding: "0", fontFamily: "'Inter', system-ui, sans-serif" }}>
-      {/* Top bar */}
-      <div style={{ background: "rgba(255,255,255,0.03)", borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "10px 16px", display: "flex", justifyContent: "space-between", alignItems: "center", position: "sticky", top: 0, zIndex: 10, backdropFilter: "blur(10px)" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <span style={{ fontSize: 13, fontWeight: 600, color: "#fff" }}>{cur + 1}<span style={{ color: "rgba(255,255,255,0.3)" }}>/{QUESTIONS.length}</span></span>
-          <div style={{ width: 80, height: 4, background: "rgba(255,255,255,0.08)", borderRadius: 99, overflow: "hidden" }}>
-            <div style={{ width: `${((cur + (answered ? 1 : 0)) / QUESTIONS.length) * 100}%`, height: "100%", background: "#534AB7", borderRadius: 99, transition: "width 0.3s" }} />
-          </div>
-        </div>
-        <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-          <span style={{ fontSize: 12, color: "#5DCAA5" }}>✓ {correct}</span>
-          <span style={{ fontSize: 12, color: "#F09595" }}>✗ {wrong}</span>
-          <span style={{ fontSize: 12, color: timer < 300 ? "#F09595" : "rgba(255,255,255,0.4)", fontFamily: "var(--font-mono, monospace)" }}>
-            {formatTime(timer)}
-          </span>
-        </div>
-      </div>
- 
-      {/* Question */}
-      <div style={{ padding: "20px 16px", maxWidth: 440, margin: "0 auto" }}>
-        <span style={{ display: "inline-block", fontSize: 10, padding: "3px 8px", borderRadius: 6, background: ci.bg, color: ci.color, marginBottom: 12, fontWeight: 500 }}>{ci.nameAr} — {ci.name}</span>
- 
-        {q.p && (
-          <div style={{ background: "rgba(255,255,255,0.03)", borderRadius: 10, padding: 12, marginBottom: 14, border: "1px solid rgba(255,255,255,0.06)", fontSize: 13, color: "rgba(255,255,255,0.6)", lineHeight: 1.7, textAlign: "left" }}>
-            {q.p}
-          </div>
-        )}
- 
-        <div style={{ fontSize: 15, fontWeight: 500, color: "#fff", marginBottom: 20, lineHeight: 1.6, textAlign: "left", whiteSpace: "pre-line" }}>
-          {q.q}
-        </div>
- 
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          {q.opts.map((opt, i) => {
-            let bg = "rgba(255,255,255,0.04)";
-            let border = "1px solid rgba(255,255,255,0.08)";
-            let col = "rgba(255,255,255,0.85)";
- 
-            if (answered) {
-              if (i === q.ans) { bg = "rgba(93,202,165,0.12)"; border = "1px solid rgba(93,202,165,0.4)"; col = "#5DCAA5"; }
-              else if (i === selected && i !== q.ans) { bg = "rgba(240,149,149,0.12)"; border = "1px solid rgba(240,149,149,0.4)"; col = "#F09595"; }
-              else { bg = "rgba(255,255,255,0.02)"; col = "rgba(255,255,255,0.3)"; }
-            }
- 
-            return (
-              <button key={i} onClick={() => handlePick(i)} disabled={answered}
-                style={{ background: bg, border, borderRadius: 10, padding: "12px 14px", fontSize: 14, color: col, cursor: answered ? "default" : "pointer", textAlign: "left", display: "flex", alignItems: "flex-start", gap: 10, transition: "all 0.15s", lineHeight: 1.4 }}>
-                <span style={{ width: 24, height: 24, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 600, flexShrink: 0,
-                  background: answered && i === q.ans ? "rgba(93,202,165,0.2)" : answered && i === selected ? "rgba(240,149,149,0.2)" : "rgba(255,255,255,0.06)",
-                  color: answered && i === q.ans ? "#5DCAA5" : answered && i === selected ? "#F09595" : "rgba(255,255,255,0.4)" }}>
-                  {answered ? (i === q.ans ? "✓" : i === selected ? "✗" : letters[i]) : letters[i]}
-                </span>
-                <span>{opt}</span>
-              </button>
-            );
-          })}
-        </div>
- 
-        {answered && (
-          <div style={{ marginTop: 12, padding: "10px 14px", borderRadius: 10, fontSize: 13, lineHeight: 1.5, textAlign: "right",
-            background: selected === q.ans ? "rgba(93,202,165,0.08)" : "rgba(240,149,149,0.08)",
-            border: `1px solid ${selected === q.ans ? "rgba(93,202,165,0.15)" : "rgba(240,149,149,0.15)"}`,
-            color: selected === q.ans ? "#5DCAA5" : "#F09595" }}>
-            {selected === q.ans ? "✓ صح! أحسنت" : `✗ غلط — الجواب الصح: ${letters[q.ans]}) ${q.opts[q.ans]}`}
-          </div>
-        )}
- 
-        {answered && (
-          <button onClick={nextQ} style={{ width: "100%", marginTop: 14, padding: "13px 0", borderRadius: 10, border: "none", background: "#534AB7", color: "#fff", fontSize: 14, fontWeight: 600, cursor: "pointer", transition: "transform 0.1s" }}
-            onMouseDown={e => e.target.style.transform = "scale(0.97)"}
-            onMouseUp={e => e.target.style.transform = "scale(1)"}>
-            {cur + 1 >= QUESTIONS.length ? "عرض النتيجة" : "السؤال التالي ←"}
-          </button>
-        )}
-      </div>
-    </div>
-  );
+function startQuiz(){
+  cur=0;ok=0;no=0;isAnswered=false;history=[];timerVal=3600;
+  clearInterval(timerInterval);
+  show('quizScreen');
+  timerInterval=setInterval(()=>{
+    timerVal--;
+    if(timerVal<=0){clearInterval(timerInterval);showResult();return}
+    const m=Math.floor(timerVal/60),s=timerVal%60;
+    const el=document.getElementById('timerEl');
+    el.textContent=m+':'+(s<10?'0':'')+s;
+    el.className=timerVal<300?'timer warn':'timer';
+  },1000);
+  renderQ();
 }
+ 
+function renderQ(){
+  const q=Q[cur];
+  isAnswered=false;
+  document.getElementById('qCounter').innerHTML=(cur+1)+'<span>/'+Q.length+'</span>';
+  document.getElementById('progFill').style.width=(cur/Q.length*100)+'%';
+  document.getElementById('tOk').textContent='✓ '+ok;
+  document.getElementById('tNo').textContent='✗ '+no;
+  document.getElementById('nextBar').classList.remove('show');
+ 
+  let h='<div class="cat-badge cat-'+q.cat+'">'+catNames[q.cat]+' — '+catEn[q.cat]+'</div>';
+  if(q.p) h+='<div class="passage">'+q.p+'</div>';
+  h+='<div class="q-text">'+q.q.replace(/\n/g,'<br>')+'</div>';
+  h+='<div class="opts">';
+  q.opts.forEach((o,i)=>{
+    h+='<div class="opt" id="opt'+i+'" onclick="pick('+i+')"><span class="letter">'+letters[i]+'</span><span>'+o+'</span></div>';
+  });
+  h+='</div><div class="feedback" id="fb"></div>';
+  document.getElementById('qBody').innerHTML=h;
+  document.getElementById('qBody').scrollTop=0;
+  window.scrollTo(0,0);
+}
+ 
+function pick(i){
+  if(isAnswered)return;
+  isAnswered=true;
+  const q=Q[cur];
+  const isOk=i===q.ans;
+  if(isOk)ok++;else no++;
+  history.push({idx:cur,picked:i,correct:isOk});
+ 
+  document.querySelectorAll('.opt').forEach((el,j)=>{
+    el.classList.add('done');
+    if(j===q.ans)el.classList.add('correct');
+    else if(j===i&&!isOk)el.classList.add('wrong');
+    else el.classList.add('dim');
+ 
+    if(j===q.ans)el.querySelector('.letter').textContent='✓';
+    else if(j===i&&!isOk)el.querySelector('.letter').textContent='✗';
+  });
+ 
+  const fb=document.getElementById('fb');
+  if(isOk){fb.textContent='✓ صح! أحسنت';fb.className='feedback show ok';}
+  else{fb.innerHTML='✗ غلط — الجواب: '+letters[q.ans]+') '+q.opts[q.ans];fb.className='feedback show no';}
+ 
+  document.getElementById('tOk').textContent='✓ '+ok;
+  document.getElementById('tNo').textContent='✗ '+no;
+  document.getElementById('progFill').style.width=((cur+1)/Q.length*100)+'%';
+ 
+  const nb=document.getElementById('nextBar');
+  nb.classList.add('show');
+  nb.querySelector('.next-btn').textContent=cur+1>=Q.length?'عرض النتيجة':'السؤال التالي ←';
+}
+ 
+function nextQuestion(){
+  if(cur+1>=Q.length){showResult();return}
+  cur++;renderQ();
+}
+ 
+function showResult(){
+  clearInterval(timerInterval);
+  const pct=Math.round(ok/Q.length*100);
+  const emoji=pct>=80?'🎉':pct>=50?'💪':'📚';
+  const msg=pct>=80?'ممتاز! جاهزة للوطني':pct>=50?'زين، راجعي الأخطاء':'محتاجة مراجعة أكثر';
+  const msgColor=pct>=80?'#5DCAA5':pct>=50?'#EF9F27':'#F09595';
+ 
+  const wrongs=history.filter(h=>!h.correct);
+ 
+  let html=`
+    <div class="res-emoji">${emoji}</div>
+    <div class="res-score">${ok}/${Q.length}</div>
+    <div class="res-pct">${pct}%</div>
+    <div class="res-msg" style="color:${msgColor}">${msg}</div>
+    <div class="res-stats">
+      <div class="res-stat ok"><div class="rn" style="color:#5DCAA5">${ok}</div><div class="rl">إجابة صحيحة</div></div>
+      <div class="res-stat no"><div class="rn" style="color:#F09595">${no}</div><div class="rl">إجابة خاطئة</div></div>
+    </div>`;
+ 
+  if(wrongs.length>0){
+    html+='<div class="wrong-title">❌ الأسئلة الي غلطتي بيها:</div><div class="wrong-list">';
+    wrongs.forEach(w=>{
+      const q=Q[w.idx];
+      html+=`<div class="wrong-item">
+        <div class="wi-head"><span class="wi-cat cat-badge cat-${q.cat}">${catNames[q.cat]}</span><span class="wi-num">Q${w.idx+1}</span></div>
+        <div class="wi-q">${q.q.replace(/\n/g,' ')}</div>
+        <div class="wi-wrong">❌ ${letters[w.picked]}) ${q.opts[w.picked]}</div>
+        <div class="wi-right">✓ ${letters[q.ans]}) ${q.opts[q.ans]}</div>
+      </div>`;
+    });
+    html+='</div>';
+  }
+ 
+  html+=`<div class="res-btns">
+    <button class="primary" onclick="startQuiz()">اعادة الاختبار</button>
+    <button class="secondary" onclick="show('homeScreen')">الرجوع للرئيسية</button>
+  </div>`;
+ 
+  document.getElementById('resultScreen').innerHTML=html;
+  show('resultScreen');
+}
+</script>
+</body>
+</html>
  
 
 
